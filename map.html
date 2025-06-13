@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wheelmap - Route Planner</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #map-container {
+        padding: 20px 0;
+      }
+      #map {
+        height: 600px;
+        width: 100%;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+      }
+      .map-controls {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .instructions {
+        background-color: white;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        margin-bottom: 20px;
+      }
+      .instructions h3 {margin-top: 0;}
+      .instructions ol {margin-left: 20px;}
+      .instructions li {margin-bottom: 10px;}
+      
+      .route-info {
+        background-color: white;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        margin-top: 20px;
+      }
+      
+      .analysis-button {
+        margin-top: 20px;
+        text-align: center;
+      }
+      
+      .route-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      
+      .butn-secondary {
+        background-color: var(--secondary-color);
+        color: white;
+        border: 2px solid var(--secondary-color);
+      }
+      .butn-secondary:hover {
+        background-color: #2ab06e;
+        border-color: #2ab06e;
+        color: white;
+      }
+      .butn-outline {
+        background-color: transparent;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+      }
+      .butn-outline:hover {
+        background-color: var(--primary-color);
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="container">
+        <div class="logo">
+          <a href="index.html"><img src="Logo.png" alt="Wheelmap Logo" /></a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="index.html#how-it-works">How It Works</a></li>
+          <li><a href="#" class="active">Route Planner</a></li>
+        </ul>
+        <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+      </nav>
+    </header>
+
+    <section class="container">
+      <h1>Wheelmap</h1>
+
+      <div class="instructions">
+        <h3>How to Use?</h3>
+        <ol>
+          <li>
+            Switch to <strong>Google Satellite</strong>, or it may not work
+          </li>
+          <li>
+            Use the <strong>Draw a Route</strong> tool to create your route by
+            clicking on the map to add points.
+          </li>
+          <li>Complete your route by double-clicking at the end point.</li>
+          <li>
+            Click <strong>Analyze Route</strong> to check the wheelchair
+            accessibility of your planned journey.
+          </li>
+        </ol>
+      </div>
+
+      <div class="map-controls">
+        <div class="route-actions">
+          <button id="draw-route" class="butn butn-primary">
+            <i class="fas fa-route"></i> Draw a Route
+          </button>
+          <button id="clear-route" class="butn butn-outline">
+            <i class="fas fa-trash"></i> Clear Route
+          </button>
+        </div>
+        <div>
+          <button id="my-location" class="butn butn-secondary">
+            <i class="fas fa-location-arrow"></i> My Location
+          </button>
+        </div>
+      </div>
+
+      <div id="map-container">
+        <div id="map"></div>
+      </div>
+
+      <div id="route-info" class="route-info" style="display: none">
+        <h3>Route Information</h3>
+        <p id="route-distance">Total distance: <span>0</span> km</p>
+        <p id="route-points">Number of points: <span>0</span></p>
+        <div class="analysis-button">
+          <button id="analyze-route" class="butn butn-primary butn-large">
+            <i class="fas fa-robot"></i> Analyze Route Accessibility
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; Made by Chace :3</p>
+        <p>Wheelmap - Accessible Route Planning</p>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+
+    <script>
+      const map = L.map("map").setView([1.3508, 103.8485], 15);
+
+      const googleSatellite = L.tileLayer(
+        "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+          maxZoom: 20,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+          attribution: "© Google",
+        }
+      ).addTo(map);
+
+      const osm = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution: "© OpenStreetMap contributors",
+          maxZoom: 19,
+        }
+      );
+
+      const baseMaps = {
+        "Google Satellite": googleSatellite,
+        OpenStreetMap: osm,
+      };
+
+      L.control.layers(baseMaps).addTo(map);
+
+      const drawnItems = new L.FeatureGroup();
+      map.addLayer(drawnItems);
+
+      const drawControl = new L.Control.Draw({
+        draw: {
+          polygon: false,
+          circle: false,
+          rectangle: false,
+          marker: false,
+          circlemarker: false,
+          polyline: {
+            shapeOptions: {
+              color: "#2e7df7",
+              weight: 5,
+            },
+            repeatMode: false,
+          },
+        },
+        edit: {
+          featureGroup: drawnItems,
+          remove: true,
+        },
+      });
+
+      let currentRoute = null;
+
+      function updateRouteInfo() {
+        const routeInfoElement = document.getElementById("route-info");
+
+        if (currentRoute) {
+          let distance = 0;
+          const latlngs = currentRoute.getLatLngs();
+
+          for (let i = 0; i < latlngs.length - 1; i++) {
+            distance += latlngs[i].distanceTo(latlngs[i + 1]);
+          }
+
+          distance = (distance / 1000).toFixed(2);
+
+          document.querySelector("#route-distance span").textContent = distance;
+          document.querySelector("#route-points span").textContent =
+            latlngs.length;
+          routeInfoElement.style.display = "block";
+        } else {
+          routeInfoElement.style.display = "none";
+        }
+      }
+
+      map.on("draw:created", function (e) {
+        drawnItems.clearLayers();
+        const layer = e.layer;
+        drawnItems.addLayer(layer);
+        currentRoute = layer;
+        updateRouteInfo();
+      });
+
+      map.on("draw:edited", function () {
+        updateRouteInfo();
+      });
+
+      map.on("draw:deleted", function () {
+        currentRoute = null;
+        updateRouteInfo();
+      });
+
+      document
+        .getElementById("draw-route")
+        .addEventListener("click", function () {
+          new L.Draw.Polyline(map, drawControl.options.draw.polyline).enable();
+        });
+
+      document
+        .getElementById("clear-route")
+        .addEventListener("click", function () {
+          drawnItems.clearLayers();
+          currentRoute = null;
+          updateRouteInfo();
+        });
+
+      document
+        .getElementById("my-location")
+        .addEventListener("click", function () {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              function (position) {
+                const userLocation = [
+                  position.coords.latitude,
+                  position.coords.longitude,
+                ];
+                map.setView(userLocation, 16);
+                L.marker(userLocation)
+                  .addTo(map)
+                  .bindPopup("You are here")
+                  .openPopup();
+              },
+              function () {
+                alert(
+                  "Could not get your location. Please check your browser permissions."
+                );
+              }
+            );
+          } else {
+            alert("Geolocation is not supported by your browser.");
+          }
+        });
+
+      document
+        .getElementById("analyze-route")
+        .addEventListener("click", function () {
+          if (currentRoute) {
+            const routeCoordinates = currentRoute
+              .getLatLngs()
+              .map((point) => [point.lat, point.lng]);
+            console.log("Route coordinates for AI analysis:", routeCoordinates);
+            alert(
+              "This feature will analyze the route for wheelchair accessibility using AI.\n\nAI model integration will be added in a future update."
+            );
+          } else {
+            alert("Please draw a route on the map first.");
+          }
+        });
+
+      document
+        .querySelector(".menu-toggle")
+        .addEventListener("click", function () {
+          document.querySelector(".nav-links").classList.toggle("active");
+        });
+    </script>
+  </body>
+</html>

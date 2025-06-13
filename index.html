@@ -39,7 +39,7 @@
             you to navigate without worry.
           </p>
           <div class="hero-cta">
-            <a href="#get-started" class="btn btn-primary btn-large"
+            <a href="map.html" class="butn butn-primary butn-large"
               >Get Started</a
             >
           </div>
@@ -121,16 +121,22 @@
     <footer>
       <div class="container">
         <p>&copy; Made by Chace :3</p>
-        <p>This code lowkey horrendous hahahh.</p>
       </div>
     </footer>
 
     <script>
-      document
-        .querySelector(".menu-toggle")
-        .addEventListener("click", function () {
-          document.querySelector(".nav-links").classList.toggle("active");
+      document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", function () {
+          try {
+            navLinks.classList.toggle("active");
+          } catch (error) {
+            console.error("Error toggling navigation links:", error);
+          }
         });
+      });
     </script>
   </body>
 </html>
