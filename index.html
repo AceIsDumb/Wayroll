@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wheelmap</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="container">
+        <div class="logo">
+          <img
+            src="https://via.placeholder.com/150x50?text=Wheelmap"
+            alt="Wheelmap Logo"
+          />
+        </div>
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+        </ul>
+        <div class="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Navigate Your World Without Limits</h1>
+          <p>
+            Wheelmap helps you map out wheelchair-accessible routes and places,
+            empowering mobility for everyone.
+          </p>
+          <div class="hero-cta">
+            <a href="#get-started" class="btn btn-primary btn-large"
+              >Get Started</a
+            >
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="map.png" alt="Wheelmap Interface Preview" />
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title">Why Choose Wheelmap</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3>AI-Powered Analysis</h3>
+            <p>
+              Our advanced AI technology analyzes routes to determine wheelchair
+              accessibility.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-route"></i>
+            </div>
+            <h3>Accessible Routes</h3>
+            <p>
+              Find the most accessible paths with information about curb cuts,
+              stairs, and surfaces.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <h3>Google Satellite View</h3>
+            <p>
+              We make use of Google's Satellite View to provide accurate
+              satellite imagery for route analysis.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+      <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Map Out Your Route</h3>
+            <p>
+              Tell us where you want to go, and we'll find the most accessible
+              routes for you.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>AI Analyzes Accessibility</h3>
+            <p>
+              Our AI evaluates routes using street view data, user reports, and
+              municipal information to assess wheelchair accessibility.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Review Route Options</h3>
+            <p>
+              Compare different paths based on accessibility features that
+              matter to you.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3>Navigate With Confidence</h3>
+            <p>You can be sure of a smooth journey thanks to our product!.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="container">
+        <h2>Ready to Explore Without Barriers?</h2>
+        <a href="#download" class="btn btn-primary btn-large"
+          >Go to AI model!</a
+        >
+      </div>
+    </section>
+
+    <script>
+      document
+        .querySelector(".menu-toggle")
+        .addEventListener("click", function () {
+          document.querySelector(".nav-links").classList.toggle("active");
+        });
+    </script>
+  </body>
+</html>
