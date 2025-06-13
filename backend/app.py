@@ -37,7 +37,7 @@ def geojson2img(geojson_data, imgsize=(64, 64), linecol=(255), linewidth=1):
     try:
         coordinates = geojson_data['geometry']['coordinates']
         if isinstance(coordinates[0], (int, float)):
-            coordinates = [coordinates]  # Convert to list of points format
+            coordinates = [coordinates]
             
         if not coordinates:
             print("No coordinates found in GeoJSON.")
