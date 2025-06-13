@@ -13,5 +13,5 @@ python version used: 3.10.2
   ```
   python3 app.py
   ```
-- open the html file in your browser
+- open the html file in your browser (safari doesnt work for some reason)
 - go to the map, follow instructions to map out a route 
