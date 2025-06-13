@@ -1,5 +1,6 @@
-#Wayroll
-##Setup
+# Wayroll
+
+## Setup
 - start up the flask server
   python3 app.py
 
