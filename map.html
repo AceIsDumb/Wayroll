@@ -309,17 +309,40 @@
       document
         .getElementById("analyze-route")
         .addEventListener("click", function () {
-          if (currentRoute) {
-            const routeCoordinates = currentRoute
-              .getLatLngs()
-              .map((point) => [point.lat, point.lng]);
-            console.log("Route coordinates for AI analysis:", routeCoordinates);
-            alert(
-              "This feature will analyze the route for wheelchair accessibility using AI.\n\nAI model integration will be added in a future update."
-            );
-          } else {
+          if (!currentRoute) {
             alert("Please draw a route on the map first.");
+            return;
           }
+
+          const routeGeoJSON = currentRoute.toGeoJSON();
+
+          fetch("http://localhost:5000/predict", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(routeGeoJSON),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.accessible) {
+                alert(
+                  "✅ This route is wheelchair accessible!\nConfidence: " +
+                    data.score.toFixed(2)
+                );
+              } else {
+                alert(
+                  "⚠️ This route is NOT wheelchair accessible.\nConfidence: " +
+                    data.score.toFixed(2)
+                );
+              }
+            })
+            .catch((error) => {
+              console.error("Error during prediction:", error);
+              alert(
+                "Something went wrong with the AI analysis. Please try again."
+              );
+            });
         });
 
       document
